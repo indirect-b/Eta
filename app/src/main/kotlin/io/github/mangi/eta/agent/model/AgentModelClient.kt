@@ -19,7 +19,6 @@ import io.github.mangi.eta.data.model.ProviderTypes
 import io.github.mangi.eta.data.model.ReasoningEffort
 import io.github.mangi.eta.data.provider.BuiltinProviders
 import io.github.mangi.eta.data.provider.GeminiModelCapabilities
-import io.github.mangi.eta.data.provider.ProviderSourceRegistry
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import io.github.mangi.eta.agent.terminal.TerminalExecutionContext
@@ -61,18 +60,14 @@ internal object AgentModelClient {
             }
         }
         return ModelConfig(
-            providerId = "builtin-openai",
-            providerName = "OpenAI",
+            providerId = IndirectProvider.MODEL_ID,
+            providerName = "Indirect",
             providerType = ProviderTypes.OPENAI_COMPATIBLE,
-            providerSourceType = ProviderSourceRegistry.resolve(
-                providerId = "builtin-openai",
-                baseUrl = "https://api.openai.com/v1",
-                providerType = ProviderTypes.OPENAI_COMPATIBLE,
-            ),
-            baseUrl = "https://api.openai.com/v1",
+            providerSourceType = "",
+            baseUrl = IndirectProvider.DEFAULT_BASE_URL,
             apiKey = "",
-            model = "gpt-5.5",
-            modelDisplayName = "GPT-5.5",
+            model = IndirectProvider.MODEL_ID,
+            modelDisplayName = "Indirect",
             systemPrompt = BuiltinProviders.DEFAULT_SYSTEM_PROMPT,
             autoCompactionEnabled = Prefs.isEnabled(Prefs.Keys.AGENT_AUTO_COMPACTION_ENABLED),
             subagentTools = Prefs.isEnabled(Prefs.Keys.AGENT_SUBAGENT_ENABLED),
