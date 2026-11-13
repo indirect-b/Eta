@@ -65,11 +65,11 @@ internal object IndirectProvider : AgentProviderClient {
             .put("session_id", request.sessionId)
         val httpRequest = Request.Builder()
             .url(url)
-            .add("Content-Type", "application/json; charset=utf-8")
-            .add("Accept", "application/json")
+            .addHeader("Content-Type", "application/json; charset=utf-8")
+            .addHeader("Accept", "application/json")
             .apply {
                 if (config.apiKey.isNotBlank()) {
-                    add("Authorization", "Bearer ${config.apiKey}")
+                    addHeader("Authorization", "Bearer ${config.apiKey}")
                 }
             }
             .post(requestJson.toString().toRequestBody(JSON_MEDIA_TYPE))
