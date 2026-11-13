@@ -1,26 +1,14 @@
 package io.github.mangi.eta.agent.model
 
-import io.github.mangi.eta.data.model.ProviderTypes
-import io.github.mangi.eta.data.model.OpenAiEndpointMode
-import io.github.mangi.eta.data.provider.ProviderConnectionProfile
-
+/**
+ * Fork: the app has exactly one agent — Indirect, reached through the relay.
+ * Every config, old or new, resolves to [IndirectProvider]; the multi-provider
+ * dispatch (OpenAI/Anthropic/Gemini, Chat Completions vs Responses) is gone.
+ * The provider client files are kept for now but are unreachable; they are
+ * deleted in the stage-2 cleanup once the fork build is proven.
+ */
 internal object ProviderClientFactory {
 
-    fun getClient(config: AgentModelClient.ModelConfig): AgentProviderClient {
-        ProviderConnectionProfile.forAuthMode(config.authMode)?.let { profile ->
-            return when (profile.endpointMode) {
-                OpenAiEndpointMode.RESPONSES -> OpenAiResponsesProvider
-                else -> OpenAiChatCompletionsProvider
-            }
-        }
-        return when (config.providerType) {
-            ProviderTypes.OPENAI_COMPATIBLE -> when (config.openAiEndpointMode) {
-                OpenAiEndpointMode.RESPONSES -> OpenAiResponsesProvider
-                else -> OpenAiChatCompletionsProvider
-            }
-            ProviderTypes.ANTHROPIC -> AnthropicMessagesProvider
-            ProviderTypes.GEMINI -> GeminiInteractionsProvider
-            else -> error("不支持的 Provider 协议类型：${config.providerType}")
-        }
-    }
+    fun getClient(config: AgentModelClient.ModelConfig): AgentProviderClient =
+        IndirectProvider
 }
